@@ -1,15 +1,14 @@
-import { Platform } from 'react-native'
-import { Database } from '@nozbe/watermelondb'
-import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
-import AccountAllocation from '../model/AccountAllocation';
+import { Platform } from 'react-native';
+import { Database } from '@nozbe/watermelondb';
+import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 
 import schema from './schema';
 import migrations from './migrations';
-// import Post from './model/Post' // ⬅️ You'll import your Models here
 import Account from '../model/Account';
 import Allocation from '../model/Allocation';
-import * as Crypto from "expo-crypto";
-import { setGenerator } from "@nozbe/watermelondb/utils/common/randomId";
+import AccountAllocation from '../model/AccountAllocation';
+import * as Crypto from 'expo-crypto';
+import { setGenerator } from '@nozbe/watermelondb/utils/common/randomId';
 setGenerator(() => Crypto.randomUUID());
 
 // First, create the adapter to the underlying database:
@@ -21,26 +20,23 @@ const adapter = new SQLiteAdapter({
   // dbName: 'myapp',
   // (recommended option, should work flawlessly out of the box on iOS. On Android,
   // additional installation steps have to be taken - disable if you run into issues...)
-  jsi: false, /* Platform.OS === 'ios' */
+  jsi: true /* Platform.OS === 'ios' */,
   // (optional, but you should implement this method)
-  onSetUpError: error => {
+  onSetUpError: (error) => {
     // Database failed to load -- offer the user to reload the app or log out
-  }
-})
+  },
+});
 
 // Then, make a Watermelon database from it!
 const database = new Database({
   adapter,
-  modelClasses: [
-    Account,
-    Allocation,
-    AccountAllocation,
-    // Post, // ⬅️ You'll add Models to Watermelon here
-  ],
-})
+  modelClasses: [Account, Allocation, AccountAllocation],
+});
 
 export default database;
 
-export const accountsCollection  = database.get<Account>('accounts');
+export const accountsCollection = database.get<Account>('accounts');
 export const allocationsCollection = database.get<Allocation>('allocations');
-export const accountAllocationColection = database.get<AccountAllocation>('account_allocations');
+export const accountAllocationCollection = database.get<AccountAllocation>(
+  'account_allocations'
+);

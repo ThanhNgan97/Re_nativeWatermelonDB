@@ -1,17 +1,14 @@
 // model/Post.js
 import { Model } from '@nozbe/watermelondb';
-import { 
-    field, 
-    text, 
-    readonly, 
-    date, 
-    relation, 
-    immutableRelation,
-    nochange
+import {
+  field,
+  text,
+  readonly,
+  date,
+  immutableRelation,
+  nochange,
 } from '@nozbe/watermelondb/decorators';
 import { Associations } from '@nozbe/watermelondb/Model';
-
-
 
 export default class AccountAllocation extends Model {
   static table = 'account_allocations';
@@ -20,11 +17,8 @@ export default class AccountAllocation extends Model {
     accounts: { type: 'belongs_to', key: 'account_id' },
   };
 
-
-
-
-  @readonly @date('create_at') createdAt: Date;
-  @readonly @date('updated_at') updatedAt:Date;
+  @readonly @date('created_at') createdAt: Date;
+  @readonly @date('updated_at') updatedAt: Date;
 
   @field('cap') cap: number;
   @field('amount') amount: number;
@@ -32,6 +26,4 @@ export default class AccountAllocation extends Model {
 
   @immutableRelation('accounts', 'account_id') account;
   @immutableRelation('allocations', 'allocation_id') allocation;
-}  
-
-// @text('account_id') name: string;
+}

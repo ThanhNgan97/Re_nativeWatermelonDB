@@ -8,17 +8,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { supabase } from '../../lib/supabase';
-import { useRouter,useNavigation } from 'expo-router';
-import AntDesign from '@expo/vector-icons/AntDesign';
-export default function Auth() {
+import { router, useNavigation } from 'expo-router';
+
+export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  
   const navigation = useNavigation();
 
-  // Hide the header for this screen
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -26,21 +24,40 @@ export default function Auth() {
   }, [navigation]);
 
 
-  async function signInWithEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
+  async function signUpWithEmail() {
+    if (password !== confirmPassword) {
+      Alert.alert('Passwords do not match!');
+      return;
+    }
 
-    if (error) Alert.alert(error.message);
-    setLoading(false);
+    setLoading(true);
+    try {
+      const { data: { session }, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        console.error('Error during sign up:', error);
+        Alert.alert(error.message);
+      } else {
+        console.log('Sign up successful:', session);
+        if (!session) {
+          Alert.alert('Please check your inbox for email verification!');
+        }
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      Alert.alert('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Hello Again!</Text>
-      <Text style={styles.subheading}>Welcome Back You've been missed!</Text>
+      <Text style={styles.heading}>Create Account</Text>
+      <Text style={styles.subheading}>Sign up to get started!</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -63,43 +80,32 @@ export default function Auth() {
           style={styles.input}
         />
       </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          onChangeText={(text) => setConfirmPassword(text)}
+          value={confirmPassword}
+          secureTextEntry={true}
+          placeholder="Confirm Password"
+          placeholderTextColor="#A3A3A3"
+          autoCapitalize="none"
+          style={styles.input}
+        />
+      </View>
 
       <TouchableOpacity
-        style={styles.forgotPassword}
-        onPress={() => Alert.alert('Forgot Password')}
-      >
-        <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.signInButton}
-        onPress={signInWithEmail}
+        style={styles.signUpButton}
+        onPress={signUpWithEmail}
         disabled={loading}
       >
-        <Text style={styles.signInButtonText}>SIGN IN</Text>
+        <Text style={styles.signUpButtonText}>SIGN UP</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push('/register')}>
-        <Text style={styles.signUpText}>
-          Create A New Account? <Text style={styles.signUpLink}>Sign Up</Text>
+      <TouchableOpacity onPress={() => router.back()}>
+        {/* router=navigation.navigate */}
+        <Text style={styles.signInText}>
+          Already have an account? <Text style={styles.signInLink}>Sign In</Text>
         </Text>
       </TouchableOpacity>
-
-      <View style={styles.orContainer}>
-        <Text style={styles.orText}>OR</Text>
-      </View>
-
-      <View style={styles.socialButtonsContainer}>
-        <TouchableOpacity style={styles.socialButton}>
-          <AntDesign name="google" size={16} color="black" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.socialButton}>
-          <AntDesign name="apple1" size={16} color="black" />
-        </TouchableOpacity>
-
-      </View>
-
     </View>
   );
 }
@@ -135,58 +141,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E5E5E5',
   },
-  forgotPassword: {
-    alignSelf: 'flex-end',
-    marginBottom: 30,
-  },
-  forgotPasswordText: {
-    color: '#6B6B6B',
-  },
-  signInButton: {
+  signUpButton: {
     backgroundColor: '#F43F5E', // Header background with color matching "Sign In" button
     paddingVertical: 15,
     borderRadius: 10,
     marginBottom: 20,
   },
-  signInButtonText: {
+  signUpButtonText: {
     color: '#FFF',
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
   },
-  signUpText: {
+  signInText: {
     textAlign: 'center',
     color: '#6B6B6B',
   },
-  signUpLink: {
+  signInLink: {
     color: '#000',
     fontWeight: 'bold',
-  },
-  orContainer: {
-    marginVertical: 20,
-    alignItems: 'center',
-  },
-  orText: {
-    color: '#6B6B6B',
-  },
-  socialButtonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  socialButton: {
-    backgroundColor: '#FFF',
-    padding: 10,
-    borderRadius: 10,
-    marginHorizontal: 10,
-    width: 50,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    justifyContent: 'center',
-  },
-  socialButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#6B6B6B',
   },
 });

@@ -1,48 +1,53 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Link, Stack } from 'expo-router';
-import Allocation from '../../../model/Allocation';
-import AllocationList from '../../../components/AllocationList';
-import { useEffect } from 'react';
-import { accountAllocationColection } from '../../../db';
-import Feather from '@expo/vector-icons/Feather';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Link, Stack, useNavigation } from 'expo-router';
+import AllocationsList from '../../../components/AllocationsList';
+import { Feather } from '@expo/vector-icons';
 import { mySync } from '../../../db/sync';
-import { Button } from '@rneui/themed';
-import { supabase } from '../../../lib/supabase';
-import *as Crypto from 'expo-crypto';
+import { useLayoutEffect } from 'react';
+
 export default function HomeScreen() {
-  const test =async () => {
-    const res=await supabase.rpc('create_account',{
-      _id:Crypto.randomUUID(),
-      _user_id:Crypto.randomUUID(),
-      _name: 'Example Name',
-      _cap:1000.0,
-      _tap:500.0,
-      _created_at: new Date().toISOString(),
-      _updated_at: new Date().toISOString(),
+  const navigation = useNavigation();
+
+  // Hide the header for this screen
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      headerTitle: () => (
+        <View style={styles.customHeader}>
+          <Text style={styles.welcomeText}>
+            Allocations
+
+          </Text>
+        </View>
+      )
     });
-      console.log(res);
-  }
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{title: 'Allocations',
-        headerRight: () =>(
-          <Feather 
-          name="refresh-cw" 
-          size={20} 
-          color="black" 
-          onPress={mySync}/>
-      ),
-      }}/>
+      <Stack.Screen 
+        options={{
+          title: 'Allocations',
+          // headerRight: () => (
+          //   <Feather
+          //     name="refresh-cw"
+          //     size={20}
+          //     color="#f34f55e"
+          //     onPress={mySync}
+          //   />
+          // ),
+        }}
+      />
 
-      <Button title='Test' onPress={test}/>
+      <AllocationsList />
 
+      {/* Floating Action Button */}
       <Link href="/allocations/new" asChild>
-        <Text style={styles.button}>New Allocation</Text>
+        <TouchableOpacity style={styles.fab}>
+          <Feather name="plus" size={24} color="white" />
+        </TouchableOpacity>
       </Link>
-
-      <AllocationList/>
 
       <StatusBar style="auto" />
     </View>
@@ -50,22 +55,43 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  // dien so 
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    position: 'relative',
+    top:15
   },
 
-  button: {
-    backgroundColor: 'green',
-    color:'white',
-    margin: 10,
-    padding:10,
-    textAlign:'center',
-    fontWeight:'bold',
-    borderRadius: 5,
-    overflow: 'hidden',
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 40,
+    width: 60,
+    height: 60,
+    backgroundColor: '#F43F5E', // Same red color for the floating button
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5, // Adds elevation to give a "floating" effect    
+  },
 
-  },  
+  customHeader:{
+    paddingHorizontal: 1,
+    paddingTop: 20,
+    paddingBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom:5
+  },
+
+  welcomeText: {
+    fontSize: 25,
+    fontWeight: '800',
+    color: '#111827', // Dark text color for welcome message
+
+  },
 });
