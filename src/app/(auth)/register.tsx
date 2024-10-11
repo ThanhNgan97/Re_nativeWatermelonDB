@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: '#FFFFFF',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 50,
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#E5E5E5',
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   signUpButton: {
     backgroundColor: '#F43F5E', // Header background with color matching "Sign In" button
     paddingVertical: 15,
-    borderRadius: 10,
+    borderRadius: 50,
     marginBottom: 20,
   },
   signUpButtonText: {

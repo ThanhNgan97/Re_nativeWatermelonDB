@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     right: 20,
-    bottom: 40,
+    bottom: 115,
     width: 60,
     height: 60,
     backgroundColor: '#F43F5E', // Same red color for the floating button

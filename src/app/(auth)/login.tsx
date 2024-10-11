@@ -1,4 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
+import Feather from '@expo/vector-icons/Feather';
 import {
   Alert,
   StyleSheet,
@@ -7,24 +8,30 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+
 import { supabase } from '../../lib/supabase';
 import { useRouter,useNavigation } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import BackgroundScreen from '../../../BackgroundScreen'
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordVisible, setPasswordVisible] = useState(false); // Quản lý hiển thị mật khẩu
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  
   const navigation = useNavigation();
 
+  // const {width:number, height:number} = Dimensions.get('window');
+
+  
+  
   // Hide the header for this screen
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, [navigation]);
-
 
   async function signInWithEmail() {
     setLoading(true);
@@ -38,9 +45,23 @@ export default function Auth() {
   }
 
   return (
+
+    
     <View style={styles.container}>
-      <Text style={styles.heading}>Hello Again!</Text>
-      <Text style={styles.subheading}>Welcome Back You've been missed!</Text>
+      <View style={styles.boder}>
+         <BackgroundScreen/> 
+
+      </View>
+      <View>
+        
+      </View>
+
+      <View style={styles.imageHello}>
+        <Text style={styles.heading}>FINANCE APP</Text>
+        <Text style={styles.subheading}>Welcome Back You've been missed!</Text>
+      </View>
+
+      <View style={{top:20}}>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -52,24 +73,43 @@ export default function Auth() {
           style={styles.input}
         />
       </View>
+
       <View style={styles.inputContainer}>
         <TextInput
           onChangeText={(text) => setPassword(text)}
           value={password}
-          secureTextEntry={true}
+          secureTextEntry={!isPasswordVisible} // Ẩn mật khẩu khi isPasswordVisible là false
           placeholder="Enter Password"
           placeholderTextColor="#A3A3A3"
           autoCapitalize="none"
           style={styles.input}
+          
         />
+          <View style={styles.iconUser}>
+          <Feather name="user" size={30} color="grey" />
+          </View>
+        <TouchableOpacity 
+          style={styles.eyeIcon} 
+          onPress={() => setPasswordVisible(!isPasswordVisible)} // Thay đổi trạng thái
+        >
+          <AntDesign 
+            name={isPasswordVisible ? 'eye' : 'eyeo'} // Icon mở mắt khi hiển thị mật khẩu
+            size={28} 
+            color="#A3A3A3" 
+          />
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity
         style={styles.forgotPassword}
-        onPress={() => Alert.alert('Forgot Password')}
+        onPress={() => router.navigate('/forgot')}
       >
         <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
       </TouchableOpacity>
+
+      <View style={styles.iconLock}>
+        <AntDesign name="lock" size={33} color="grey" />
+      </View>
 
       <TouchableOpacity
         style={styles.signInButton}
@@ -77,6 +117,7 @@ export default function Auth() {
         disabled={loading}
       >
         <Text style={styles.signInButtonText}>SIGN IN</Text>
+
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.push('/register')}>
@@ -95,14 +136,15 @@ export default function Auth() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.socialButton}>
-          <AntDesign name="apple1" size={16} color="black" />
+        <FontAwesome5 name="facebook-f" size={16} color="black" />
         </TouchableOpacity>
-
       </View>
-
+      </View>
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -111,41 +153,60 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
+
+ 
+
+  imageStyle:{
+    width:'auto',
+    height:'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+   
+
+  },
+
   heading: {
-    fontSize: 30,
+    fontSize: 60,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
-    color: '#111',
+    color: '#ffffff',
+
   },
   subheading: {
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 40,
-    color: '#6B6B6B',
+    // color: '#6B6B6B',
   },
   inputContainer: {
     marginBottom: 20,
   },
+
   input: {
     backgroundColor: '#FFFFFF',
     padding: 15,
-    borderRadius: 10,
+    paddingLeft:50,
+    borderRadius: 50,
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#E5E5E5',
   },
+
   forgotPassword: {
     alignSelf: 'flex-end',
     marginBottom: 30,
   },
   forgotPasswordText: {
-    color: '#6B6B6B',
-  },
+    color: '#007BFF',
+    // textDecorationLine: 'underline',//chữ gạch chân
+    fontWeight: 'bold',
+  }
+  ,
   signInButton: {
-    backgroundColor: '#F43F5E', // Header background with color matching "Sign In" button
+    backgroundColor: '#F43F5E', 
     paddingVertical: 15,
-    borderRadius: 10,
+    borderRadius: 50,
     marginBottom: 20,
   },
   signInButtonText: {
@@ -184,9 +245,42 @@ const styles = StyleSheet.create({
     borderColor: '#E5E5E5',
     justifyContent: 'center',
   },
-  socialButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#6B6B6B',
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 17,
+    zIndex: 1,
+    transform: [{ scale: 0.7 }]
   },
+
+  iconUser:{
+    position: 'absolute',
+    left: 10,
+    bottom:95,
+    zIndex: 1,
+    transform: [{ scale: 0.7 }]
+  },
+
+  iconLock:{
+    position: 'absolute',
+    left: 10,
+    bottom: 275,
+    zIndex: 1,
+    transform: [{ scale: 0.7 }]
+  },
+
+  boder:{
+    height:270,
+    width:411,
+    position: 'absolute',
+    bottom:620 //620
+  },
+
+  imageHello:{
+    bottom:60,
+  }
+
+
 });
+
+

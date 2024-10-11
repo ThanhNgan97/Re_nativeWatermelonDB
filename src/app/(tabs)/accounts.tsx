@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#111827', // Dark text color for welcome message
   },
+
   notification: {
     fontSize: 18,
     color: '#F43F5E', // Red color matching the rest of the app
@@ -126,14 +127,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     backgroundColor: '#F43F5E',
-    borderRadius: 10,
-    marginBottom: 10,
-    top: 15,
+    borderRadius: 50,
+    marginBottom: 8,
+    top: 5,
   },
 
   headerText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
 
@@ -144,14 +145,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 50,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
     marginBottom: 15,
-    
+    bottom:100
   },
 
   input: {
@@ -159,14 +160,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderColor: '#D1D5DB',
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 50,
     padding: 10,
     backgroundColor: '#F3F4F6',
   },
 
   button: {
     backgroundColor: '#F43F5E',
-    borderRadius: 8,
+    borderRadius: 50,
     paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
@@ -174,13 +175,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 3, 
+    elevation: 3,
+    bottom:90 ,
+    
   },
 
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
   },
 
   ringIcon:{
