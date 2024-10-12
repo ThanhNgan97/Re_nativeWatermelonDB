@@ -39,8 +39,9 @@ export default function HomeScreen() {
           // ),
         }}
       />
-
+    <View style = {{paddingBottom: 100}}>
       <AllocationsList />
+    </View>
 
       {/* Floating Action Button */}
       <Link href="/allocations/new" asChild>

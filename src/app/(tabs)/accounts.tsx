@@ -23,7 +23,6 @@ export default function AccountsScreen() {
         <View style={styles.customHeader}>
           <Text style={styles.welcomeText}>
             Account
-
           </Text>
         </View>
       ),
@@ -64,7 +63,9 @@ export default function AccountsScreen() {
         <Text style={styles.headerText}>TAP</Text>
       </View>
 
-      <AccountsList />
+      <View style={{flex: 1,  marginBottom: 100}}>
+        <AccountsList />
+      </View>
 
       <View style={styles.inputRow}>
         <TextInput
@@ -147,12 +148,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 50,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width:0, height:2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
     marginBottom: 15,
-    bottom:100
+    bottom:85
   },
 
   input: {
