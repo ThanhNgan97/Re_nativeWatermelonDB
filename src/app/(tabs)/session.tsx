@@ -2,6 +2,8 @@ import React, { useState, useLayoutEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Pressable } from 'react-native';
 import { useAuth } from '../../providers/AuthProvider';
 import { useNavigation } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons'; // Import MaterialIcons
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function SessionScreen() {
   const { user, logout } = useAuth();
@@ -26,11 +28,28 @@ export default function SessionScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.iconCircle}>
+
+      </View>
       <Text style={styles.title}>Profile</Text>
+
       
       <View style={styles.infoContainer}>
-        <Text style={styles.label}>Email:</Text>
-        <Text style={styles.value}>{user?.email}</Text>
+      <View style={styles.row}>
+          {/* <MaterialIcons name="phone" size={24} color="#6B6B6B" /> */}
+          <Text style={styles.value}>{user.user_metadata.userName|| 'Phone Number'}</Text>
+        </View>
+
+
+        <View style={styles.row}>
+          <MaterialIcons name="phone" size={24} color="#6B6B6B" />
+          <Text style={styles.value}>{user.user_metadata.phoneNumber|| 'Phone Number'}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <MaterialIcons name="email" size={24} color="#6B6B6B" />
+          <Text style={styles.value}>{user?.email || 'Email'}</Text>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress} activeOpacity={0.3}>
@@ -76,7 +95,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
     backgroundColor: '#F5F5F5',
-    
   },
   title: {
     fontSize: 30,
@@ -93,15 +111,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E5E5E5',
   },
-  label: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    color: '#6B6B6B',
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   value: {
     fontSize: 18,
     color: '#111',
+    marginLeft: 10, // Add some space between icon and text
   },
   logoutButton: {
     backgroundColor: '#F43f5e',
@@ -186,4 +204,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+
+  iconCircle:{
+    width:80,
+    height:80,
+    borderRadius:50,
+    borderWidth:2,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#F5F5F5',
+    marginBottom:20,
+    left:130,
+
+
+  }
 });

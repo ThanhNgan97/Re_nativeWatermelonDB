@@ -14,6 +14,8 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [userName, setUserName] = useState(''); // State for User Name
+  const [phoneNumber, setPhoneNumber] = useState(''); // State for Phone Number
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
@@ -22,7 +24,6 @@ export default function Register() {
       headerShown: false,
     });
   }, [navigation]);
-
 
   async function signUpWithEmail() {
     if (password !== confirmPassword) {
@@ -35,6 +36,13 @@ export default function Register() {
       const { data: { session }, error } = await supabase.auth.signUp({
         email: email,
         password: password,
+        // phonenumber:phoneNumber,
+        options: {
+          data: {
+            userName: userName, // Send userName to database
+            phoneNumber: phoneNumber, // Send phoneNumber to database
+          },
+        },
       });
 
       if (error) {
@@ -59,6 +67,19 @@ export default function Register() {
       <Text style={styles.heading}>Create Account</Text>
       <Text style={styles.subheading}>Sign up to get started!</Text>
 
+      {/* User Name Input */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          onChangeText={(text) => setUserName(text)}
+          value={userName}
+          placeholder="Enter User Name"
+          placeholderTextColor="#A3A3A3"
+          autoCapitalize="words"
+          style={styles.input}
+        />
+      </View>
+
+      {/* Email Input */}
       <View style={styles.inputContainer}>
         <TextInput
           onChangeText={(text) => setEmail(text)}
@@ -69,6 +90,20 @@ export default function Register() {
           style={styles.input}
         />
       </View>
+
+      {/* Phone Number Input */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          onChangeText={(text) => setPhoneNumber(text)}
+          value={phoneNumber}
+          placeholder="Enter Phone Number"
+          placeholderTextColor="#A3A3A3"
+          keyboardType="phone-pad"
+          style={styles.input}
+        />
+      </View>
+
+      {/* Password Input */}
       <View style={styles.inputContainer}>
         <TextInput
           onChangeText={(text) => setPassword(text)}
@@ -80,6 +115,8 @@ export default function Register() {
           style={styles.input}
         />
       </View>
+
+      {/* Confirm Password Input */}
       <View style={styles.inputContainer}>
         <TextInput
           onChangeText={(text) => setConfirmPassword(text)}
@@ -92,6 +129,7 @@ export default function Register() {
         />
       </View>
 
+      {/* Sign Up Button */}
       <TouchableOpacity
         style={styles.signUpButton}
         onPress={signUpWithEmail}
@@ -100,8 +138,8 @@ export default function Register() {
         <Text style={styles.signUpButtonText}>SIGN UP</Text>
       </TouchableOpacity>
 
+      {/* Link to Sign In */}
       <TouchableOpacity onPress={() => router.back()}>
-        {/* router=navigation.navigate */}
         <Text style={styles.signInText}>
           Already have an account? <Text style={styles.signInLink}>Sign In</Text>
         </Text>
