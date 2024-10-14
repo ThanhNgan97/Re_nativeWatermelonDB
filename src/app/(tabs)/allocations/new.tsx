@@ -1,6 +1,6 @@
 import { Stack, router, useNavigation } from 'expo-router';
 import { useLayoutEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import database, {
   accountAllocationCollection,
   accountsCollection,
@@ -71,20 +71,19 @@ function NewAllocationScreen({ accounts }: { accounts: Account[] }) {
         />
       </View>
 
-      {accounts.map((account) => (
-        <View key={account.id} style={styles.inputRow}>
-          <Text style={styles.accountText}>
-            {account.name}: {account.cap}%
-          </Text>
-          <Text style={styles.amount}>
-            ${((Number.parseFloat(income) * account.cap) / 100).toFixed(2)}
-          </Text>
-        </View>
-      ))}
-
-      <TouchableOpacity>
-
-      </TouchableOpacity>
+      {/* Wrap the list in a ScrollView to make it scrollable */}
+      <ScrollView style={styles.scrollContainer}>
+        {accounts.map((account) => (
+          <View key={account.id} style={[styles.inputRow, { borderRadius: 50 , marginBottom:8 }]}>
+            <Text style={styles.accountText}>
+              {account.name}: {account.cap}%
+            </Text>
+            <Text style={styles.amount}>
+              ${((Number.parseFloat(income) * account.cap) / 100).toFixed(2)}
+            </Text>
+          </View>
+        ))}
+      </ScrollView>
 
       <TouchableOpacity style={styles.button} onPress={save}>
         <Text style={styles.buttonText}>Save</Text>
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: '#F9FAFB', // Light background for modern look
     flex: 1,
-    gap: 15,
+    paddingBottom: 120,
   },
   label: {
     fontWeight: 'bold',
@@ -112,7 +111,6 @@ const styles = StyleSheet.create({
     color: '#374151', // Dark gray for a modern text color
     width: 100,
   },
-  // income
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -124,10 +122,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3, // Shadow for floating effect
-    marginBottom: 10,
-    top:10
+    marginBottom: 2,
+    top: 10,
   },
-  // dien so
   input: {
     flex: 1,
     paddingVertical: 10,
@@ -147,10 +144,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F43F5E', // Red to match the design accent
   },
-
   button: {
     backgroundColor: '#F43F5E', // Red button for save action
-    borderRadius: 10,
+    borderRadius: 50,
     paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
@@ -159,29 +155,30 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3, // Floating button effect
-    top:30
+    top: 30,
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
   },
-
-  customHeader:{
+  customHeader: {
     paddingHorizontal: 1,
     paddingTop: 20,
     paddingBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    bottom:5
+    bottom: 5,
   },
-
   welcomeText: {
     fontSize: 25,
     fontWeight: '800',
     color: '#111827', // Dark text color for welcome message
     right: 15,
-    bottom: 3
+    bottom: 3,
   },
-  
+  scrollContainer: {
+    flex: 1,
+    marginTop: 10,
+  },
 });

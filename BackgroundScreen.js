@@ -22,7 +22,7 @@ const BackgroundScreen =() =>{
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        opacity: 1,
+        opacity: 0.5
       }
 
   })

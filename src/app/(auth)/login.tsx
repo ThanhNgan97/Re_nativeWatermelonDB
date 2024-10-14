@@ -14,6 +14,7 @@ import { useRouter,useNavigation } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import BackgroundScreen from '../../../BackgroundScreen'
+
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -116,9 +117,11 @@ export default function Auth() {
         onPress={signInWithEmail}
         disabled={loading}
       >
-        <Text style={styles.signInButtonText}>SIGN IN</Text>
+        {/* <Text style={styles.signInButtonText}>SIGN IN</Text> */}
+        <Text style={styles.signInButtonText}>{loading ? "Loading..." : "SIGN IN"}</Text>
 
-      </TouchableOpacity>
+
+      </TouchableOpacity>   
 
       <TouchableOpacity onPress={() => router.push('/register')}>
         <Text style={styles.signUpText}>
@@ -170,7 +173,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
-    color: '#ffffff',
+    color: 'black',
 
   },
   subheading: {
@@ -234,6 +237,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+
   socialButton: {
     backgroundColor: '#FFF',
     padding: 10,

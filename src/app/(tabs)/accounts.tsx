@@ -59,8 +59,12 @@ export default function AccountsScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Name</Text>
-        <Text style={styles.headerText}>CAP</Text>
+        <Text style={styles.headerText}>CAP    </Text>
         <Text style={styles.headerText}>TAP</Text>
+        <Text style={styles.headerText}>         </Text>
+
+        
+        
       </View>
 
       <View style={{flex: 1,  marginBottom: 100}}>
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     backgroundColor: '#F43F5E',
-    borderRadius: 50,
+    borderRadius: 10,
     marginBottom: 8,
     top: 5,
   },
