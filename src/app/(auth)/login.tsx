@@ -58,7 +58,7 @@ export default function Auth() {
       </View>
 
       <View style={styles.imageHello}>
-        <Text style={styles.heading}>FINANCE APP</Text>
+        <Text style={styles.heading}></Text>
         <Text style={styles.subheading}>Welcome Back You've been missed!</Text>
       </View>
 
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
-    color: 'black',
+    color: '#ffffff',
 
   },
   subheading: {
@@ -194,11 +194,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#E5E5E5',
+    bottom:30
   },
 
   forgotPassword: {
     alignSelf: 'flex-end',
     marginBottom: 30,
+    bottom:19
   },
   forgotPasswordText: {
     color: '#007BFF',
@@ -251,24 +253,24 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     position: 'absolute',
-    right: 10,
-    top: 17,
+    right: 15,
+    top: -15,
     zIndex: 1,
     transform: [{ scale: 0.7 }]
   },
 
   iconUser:{
     position: 'absolute',
-    left: 10,
-    bottom:95,
+    left: 13,
+    bottom:125,
     zIndex: 1,
     transform: [{ scale: 0.7 }]
   },
 
   iconLock:{
     position: 'absolute',
-    left: 10,
-    bottom: 275,
+    left: 13,
+    bottom: 305,
     zIndex: 1,
     transform: [{ scale: 0.7 }]
   },

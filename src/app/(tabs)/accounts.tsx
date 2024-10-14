@@ -1,5 +1,4 @@
-
-import { View, Text, StyleSheet, Button, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import AccountsList from '../../components/AccountsList';
 import { useLayoutEffect, useState } from 'react';
 import database, { accountsCollection } from '../../db';
@@ -12,6 +11,7 @@ export default function AccountsScreen() {
   const [name, setName] = useState('');
   const [cap, setCap] = useState('');
   const [tap, setTap] = useState('');
+  const [isInputActive, setIsInputActive] = useState(false);
   const { user } = useAuth();
 
   const navigation = useNavigation();
@@ -28,16 +28,14 @@ export default function AccountsScreen() {
       ),
       headerRight: () => (
         <TouchableOpacity>
-          <View style={styles.ringRedIcon}/>
+          <View style={styles.ringRedIcon} />
           <View style={styles.ringIcon}>
             <Ionicons name="notifications-outline" size={28} color="black" />
           </View>
         </TouchableOpacity>
-        
       ),
     });
   }, [navigation, user]);
-  
 
   const createAccount = async () => {
     await database.write(async () => {
@@ -55,19 +53,24 @@ export default function AccountsScreen() {
     await mySync();
   };
 
+  const handleFocus = () => {
+    setIsInputActive(true);
+  };
+
+  const handleBlur = () => {
+    setIsInputActive(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Name</Text>
-        <Text style={styles.headerText}>CAP    </Text>
+        <Text style={styles.headerText}>CAP      </Text>
         <Text style={styles.headerText}>TAP</Text>
-        <Text style={styles.headerText}>         </Text>
-
-        
-        
+        <Text style={styles.headerText}>            </Text>
       </View>
 
-      <View style={{flex: 1,  marginBottom: 100}}>
+      <View style={{ flex: 1, marginBottom: 100 }}>
         <AccountsList />
       </View>
 
@@ -76,25 +79,27 @@ export default function AccountsScreen() {
           value={name}
           onChangeText={setName}
           placeholder="Name"
-          style={styles.input}
+          style={[styles.input, isInputActive ? styles.activeInput : {}]}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
         <TextInput
           value={cap}
           onChangeText={setCap}
           placeholder="CAP %"
-          style={styles.input}
+          style={[styles.input, isInputActive ? styles.activeInput : {}]}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
         <TextInput
           value={tap}
           onChangeText={setTap}
           placeholder="TAP %"
-          style={styles.input}
+          style={[styles.input, isInputActive ? styles.activeInput : {}]}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       </View>
-{/* 
-      <View style={styles.headerRing}>
-        <Text style={styles.headerRingText}>Accounts</Text>
-      </View> */}
 
       <TouchableOpacity style={styles.button} onPress={createAccount}>
         <Text style={styles.buttonText}>Add Account</Text>
@@ -118,12 +123,12 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 25,
     fontWeight: '800',
-    color: '#111827', // Dark text color for welcome message
+    color: '#111827',
   },
 
   notification: {
     fontSize: 18,
-    color: '#F43F5E', // Red color matching the rest of the app
+    color: '#F43F5E',
   },
 
   header: {
@@ -135,6 +140,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 8,
     top: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
 
   headerText: {
@@ -143,7 +153,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  //khung them
   inputRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -151,14 +160,15 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 50,
-    shadowColor: '#000',
-    shadowOffset: {width:0, height:2},
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
+    shadowColor: '#000', // Shadow color
+    shadowOffset: { width: 0, height: 4 }, // Stronger shadow position (height: 4 for more depth)
+    shadowOpacity: 0.2, // Slightly darker shadow
+    shadowRadius: 6, // Increased blur radius for softer edges
+    elevation: 6, // Increased elevation for Android
     marginBottom: 15,
-    bottom:85
+    bottom: 85,
   },
+  
 
   input: {
     flex: 1,
@@ -168,6 +178,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 10,
     backgroundColor: '#F3F4F6',
+  },
+
+  activeInput: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
   },
 
   button: {
@@ -181,8 +199,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
-    bottom:90 ,
-    
+    bottom: 90,
   },
 
   buttonText: {
@@ -191,14 +208,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
-  ringIcon:{
-    paddingRight:15,
-    zIndex:-50,
-    
+  ringIcon: {
+    paddingRight: 15,
+    zIndex: -50,
   },
 
-  ringRedIcon:{
-    backgroundColor:'red',
+  ringRedIcon: {
+    backgroundColor: 'red',
     width: 8,
     height: 8,
     borderRadius: 5,
@@ -207,21 +223,20 @@ const styles = StyleSheet.create({
     right: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    top:2
+    top: 2,
   },
 
-  headerRing:{
+  headerRing: {
     flexDirection: 'row',
     paddingVertical: 10,
     paddingHorizontal: 15,
     position: 'absolute',
-    height:50,
-    top:-20  
+    height: 50,
+    top: -20,
   },
 
-  headerRingText:{
+  headerRingText: {
     fontSize: 18,
-    color: 'black',  
+    color: 'black',
   },
-  
 });

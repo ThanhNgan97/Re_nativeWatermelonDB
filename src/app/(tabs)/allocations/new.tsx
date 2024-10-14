@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     color: '#374151', // Dark gray for a modern text color
     width: 100,
   },
+
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -125,6 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     top: 10,
   },
+  
   input: {
     flex: 1,
     paddingVertical: 10,
