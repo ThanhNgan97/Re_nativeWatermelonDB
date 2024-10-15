@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import { supabase } from '../../lib/supabase';
-import { useRouter,useNavigation } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import BackgroundScreen from '../../../BackgroundScreen'
@@ -18,16 +18,17 @@ import BackgroundScreen from '../../../BackgroundScreen'
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isPasswordVisible, setPasswordVisible] = useState(false); // Quản lý hiển thị mật khẩu
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const navigation = useNavigation();
 
-  // const {width:number, height:number} = Dimensions.get('window');
+  function isValidEmail(email) {
+    // Basic email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 
-  
-  
-  // Hide the header for this screen
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -35,26 +36,45 @@ export default function Auth() {
   }, [navigation]);
 
   async function signInWithEmail() {
+    // Check if the email is in a valid format before making the request
+    if (!isValidEmail(email)) {
+      Alert.alert('Error:', 'Invalid email format. Please enter a valid Gmail address.');
+      return;
+    }
+  
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+  
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
-
-    if (error) Alert.alert(error.message);
+  
+    if (error) {
+      if (error.message.includes("Invalid login credentials")) {
+        // Check if the error is related to incorrect password
+        Alert.alert('Error:', 'Incorrect password. Please try again.');
+      } else if (error.message.includes("Invalid email or password")) {
+        // General case for invalid email or password
+        Alert.alert('Error:', 'Invalid email or password. Please try again.');
+      } else {
+        Alert.alert('Error:', error.message);
+      }
+    } else {
+      if (!data.session) {
+        Alert.alert('Please check your inbox for email verification!');
+      } else {
+        console.log('Sign-in successful:', data.session);
+        // Redirect the user to the home page or wherever necessary
+      }
+    }
+  
     setLoading(false);
   }
-
-  return (
-
     
+  return (
     <View style={styles.container}>
       <View style={styles.boder}>
-         <BackgroundScreen/> 
-
-      </View>
-      <View>
-        
+        <BackgroundScreen />
       </View>
 
       <View style={styles.imageHello}>
@@ -62,90 +82,89 @@ export default function Auth() {
         <Text style={styles.subheading}>Welcome Back You've been missed!</Text>
       </View>
 
-      <View style={{top:20}}>
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder="Enter Email"
-          placeholderTextColor="#A3A3A3"
-          autoCapitalize="none"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={!isPasswordVisible} // Ẩn mật khẩu khi isPasswordVisible là false
-          placeholder="Enter Password"
-          placeholderTextColor="#A3A3A3"
-          autoCapitalize="none"
-          style={styles.input}
-          
-        />
-          <View style={styles.iconUser}>
-          <Feather name="user" size={30} color="grey" />
-          </View>
-        <TouchableOpacity 
-          style={styles.eyeIcon} 
-          onPress={() => setPasswordVisible(!isPasswordVisible)} // Thay đổi trạng thái
-        >
-          <AntDesign 
-            name={isPasswordVisible ? 'eye' : 'eyeo'} // Icon mở mắt khi hiển thị mật khẩu
-            size={28} 
-            color="#A3A3A3" 
+      <View style={{ top: 20 }}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            onChangeText={(text) => setEmail(text)}
+            value={email}
+            placeholder="Enter Email"
+            placeholderTextColor="#A3A3A3"
+            autoCapitalize="none"
+            style={styles.input}
           />
-        </TouchableOpacity>
-      </View>
+        </View>
 
-      <TouchableOpacity
-        style={styles.forgotPassword}
-        onPress={() => router.navigate('/forgot')}
-      >
-        <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
-      </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <TextInput
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            secureTextEntry={!isPasswordVisible}
+            placeholder="Enter Password"
+            placeholderTextColor="#A3A3A3"
+            autoCapitalize="none"
+            style={styles.input}
+          />
+          <View style={styles.iconUser}>
+            <Feather name="user" size={30} color="grey" />
+          </View>
+          <TouchableOpacity
+            style={styles.eyeIcon}
+            onPress={() => setPasswordVisible(!isPasswordVisible)}
+          >
+            <AntDesign
+              name={isPasswordVisible ? 'eye' : 'eyeo'}
+              size={28}
+              color="#A3A3A3"
+            />
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.iconLock}>
-        <AntDesign name="lock" size={33} color="grey" />
-      </View>
-
-      <TouchableOpacity
-        style={styles.signInButton}
-        onPress={signInWithEmail}
-        disabled={loading}
-      >
-        {/* <Text style={styles.signInButtonText}>SIGN IN</Text> */}
-        <Text style={styles.signInButtonText}>{loading ? "Loading..." : "SIGN IN"}</Text>
-
-
-      </TouchableOpacity>   
-
-      <TouchableOpacity onPress={() => router.push('/register')}>
-        <Text style={styles.signUpText}>
-          Create A New Account? <Text style={styles.signUpLink}>Sign Up</Text>
-        </Text>
-      </TouchableOpacity>
-
-      <View style={styles.orContainer}>
-        <Text style={styles.orText}>OR</Text>
-      </View>
-
-      <View style={styles.socialButtonsContainer}>
-        <TouchableOpacity style={styles.socialButton}>
-          <AntDesign name="google" size={16} color="black" />
+        <TouchableOpacity
+          style={styles.forgotPassword}
+          onPress={() => router.navigate('/forgot')}
+        >
+          <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.socialButton}>
-        <FontAwesome5 name="facebook-f" size={16} color="black" />
+        <View style={styles.iconLock}>
+          <AntDesign name="lock" size={33} color="grey" />
+        </View>
+
+        <TouchableOpacity
+          style={styles.signInButton}
+          onPress={signInWithEmail}
+          disabled={loading}
+        >
+          <Text style={styles.signInButtonText}>
+            {loading ? "Loading..." : "SIGN IN"}
+          </Text>
         </TouchableOpacity>
-      </View>
+
+        <TouchableOpacity onPress={() => router.push('/register')}>
+          <Text style={styles.signUpText}>
+            Create A New Account? <Text style={styles.signUpLink}>Sign Up</Text>
+          </Text>
+        </TouchableOpacity>
+
+        <View style={styles.orContainer}>
+          <Text style={styles.orText}>OR</Text>
+        </View>
+
+        <View style={styles.socialButtonsContainer}>
+          <TouchableOpacity style={styles.socialButton}>
+            <AntDesign name="google" size={16} color="black" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.socialButton}>
+            <FontAwesome5 name="facebook-f" size={16} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 }
+
+
 
 
 
@@ -180,8 +199,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 40,
-    // color: '#6B6B6B',
+    color: '#ffffff',
   },
+
   inputContainer: {
     marginBottom: 20,
   },
@@ -289,4 +309,8 @@ const styles = StyleSheet.create({
 
 });
 
+
+  function isValidEmail(email: string) {
+    throw new Error('Function not implemented.');
+  }
 

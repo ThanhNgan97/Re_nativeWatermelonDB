@@ -65,27 +65,27 @@ export default function SessionScreen() {
       <Text style={styles.title}></Text>
 
       <View style={styles.infoContainer}>
-        <View style={styles.row}>
+        <View style={styles.row1}>
           <FontAwesome6 name="user-large" size={24} color="#6B6B6B" />
-          <Text style={styles.value}>{user.user_metadata.userName || 'User Name'}</Text>
+          <Text style={styles.value1}>{user.user_metadata.userName || 'User Name'}</Text>
         </View>
         
         <View style={[styles.divider, {bottom:30}]}/>
 
         
-        <View style={[styles.row, {bottom:50}]}>
+        <View style={styles.row2}>
           <MaterialIcons name="phone" size={24} color="#6B6B6B" />
-          <Text style={styles.value}>{user.user_metadata.phoneNumber || 'Phone Number'}</Text>
+          <Text style={styles.value2}>{user.user_metadata.phoneNumber || 'Phone Number'}</Text>
         </View>
 
         <View style={[styles.divider, {bottom:70}]}/>
 
-        <View style={[styles.row, {bottom:90}]}>
+        <View style={styles.row3}>
           <MaterialIcons name="email" size={24} color="#6B6B6B" />
           <Text style={styles.value}>{user?.email || 'Email'}</Text>
         </View>
 
-        <View style={[styles.divider, {bottom:110}]}/>
+        <View style={[styles.divider, {bottom:110, height:3}]}/>
 
       </View>
 
@@ -194,17 +194,57 @@ const styles = StyleSheet.create({
 
 
   },
-  row: {
+  row1: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
     padding: 30,
+    bottom:-17,
+    left:-19
   },
+
+  row2:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    padding: 30,
+    bottom:20,
+    left:-19
+  },
+
+  row3:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    padding: 30,
+    bottom:60, 
+    left:-19
+  },
+
   value: {
     fontSize: 18,
     color: '#111',
     marginLeft: 10,
+    bottom:-1
   },
+
+  value1:{
+    fontSize: 18,
+    color: '#111',
+    marginLeft: 10,
+    bottom:-5
+  },
+
+
+  value2:{
+    fontSize: 18,
+    color: '#111',
+    marginLeft: 10,
+    bottom:-2
+  },
+
+
+
   logoutButton: {
   
     backgroundColor: '#F43f5e',
