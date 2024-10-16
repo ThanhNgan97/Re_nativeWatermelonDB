@@ -19,7 +19,7 @@ const AllocationListItem = ({
         <Text style={styles.date}>
           {allocation.createdAt.toLocaleDateString()}
         </Text>
-        <Text style={styles.income}>${allocation.income}</Text>
+        <Text style={styles.income}>{allocation.income} VNĐ</Text>
       </View>
 
       <View style={{ gap: 10, padding: 10, shadowOpacity: 0.9, }}>

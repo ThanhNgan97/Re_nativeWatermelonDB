@@ -104,13 +104,16 @@ export default function Auth() {
             autoCapitalize="none"
             style={styles.input}
           />
+
           <View style={styles.iconUser}>
             <Feather name="user" size={30} color="grey" />
           </View>
+
           <TouchableOpacity
             style={styles.eyeIcon}
             onPress={() => setPasswordVisible(!isPasswordVisible)}
           >
+
             <AntDesign
               name={isPasswordVisible ? 'eye' : 'eyeo'}
               size={28}
@@ -292,7 +295,7 @@ const styles = StyleSheet.create({
     left: 13,
     bottom: 305,
     zIndex: 1,
-    transform: [{ scale: 0.7 }]
+    transform: [{ scale: 0.7 }],
   },
 
   boder:{

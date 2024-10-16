@@ -15,7 +15,7 @@ const AccountAllocationItem = ({
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
       <Text>{account.name}</Text>
-      <Text>${accountAllocation.amount}</Text>
+      <Text>{accountAllocation.amount} VNĐ</Text>
     </View>
   );
 };

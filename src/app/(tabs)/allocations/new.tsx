@@ -53,7 +53,6 @@ function NewAllocationScreen({ accounts }: { accounts: Account[] }) {
     await mySync();
     setIncome('');
     router.back();
-
   };
 
   return (
@@ -65,7 +64,7 @@ function NewAllocationScreen({ accounts }: { accounts: Account[] }) {
         <TextInput
           value={income}
           onChangeText={setIncome}
-          placeholder="$123"
+          placeholder="123 VND"  // Updated placeholder
           style={styles.input}
           keyboardType="numeric"
         />
@@ -74,12 +73,12 @@ function NewAllocationScreen({ accounts }: { accounts: Account[] }) {
       {/* Wrap the list in a ScrollView to make it scrollable */}
       <ScrollView style={styles.scrollContainer}>
         {accounts.map((account) => (
-          <View key={account.id} style={[styles.inputRow, { borderRadius: 50 , marginBottom:8 }]}>
+          <View key={account.id} style={[styles.inputRow, { borderRadius: 50, marginBottom: 8 }]}>
             <Text style={styles.accountText}>
               {account.name}: {account.cap}%
             </Text>
             <Text style={styles.amount}>
-              ${((Number.parseFloat(income) * account.cap) / 100).toFixed(2)}
+              {(Number.parseFloat(income) * account.cap / 100).toFixed(2)} VNĐ
             </Text>
           </View>
         ))}
