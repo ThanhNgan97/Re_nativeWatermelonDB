@@ -12,9 +12,9 @@ export default function SessionScreen() {
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCancelPressed, setCancelPressed] = useState(false);
-  const animatedValue = useRef(new Animated.Value(0)).current;  // Giá trị hoạt ảnh
-  // const { useredit } = updateUser();
+  const animatedValue = useRef(new Animated.Value(0)).current;
 
+  const [isMenuVisible, setMenuVisible] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -22,12 +22,11 @@ export default function SessionScreen() {
     });
   }, [navigation]);
 
-  // Hàm khởi chạy hoạt ảnh
   useEffect(() => {
     Animated.loop(
       Animated.timing(animatedValue, {
         toValue: 1,
-        duration: 10000, // thời gian chạy hết một vòng (10 giây)
+        duration: 10000,
         easing: Easing.linear,
         useNativeDriver: true,
       })
@@ -43,97 +42,87 @@ export default function SessionScreen() {
     logout();
   };
 
-  // Hiệu ứng di chuyển từ phải sang trái
-  const translateX = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [400, -400], // Di chuyển từ 400px bên phải màn hình sang -400px bên trái
-  });
+  const handleSaveUserName = async () => {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        data: { userName: "KHANH BO DANG YEW" },
+      });
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+  };
 
-/////
-const handleSaveUserName = async () => {
-  
+  const handleMenuPress = () => {
+    setMenuVisible(!isMenuVisible);
+  };
 
-  try {
-    const { data, error } = await supabase.auth.updateUser({
-      data: {
-        userName : "KHANH BO DANG YEW",
-        
-      },
-    });
-
-    // if (error) {
-    //   console.error('Error updating username:', error.message);
-    //   alert('Failed to update username');
-    // } else {
-    //   alert('Username updated successfully');
-    //   setIsEditing(false); // Exit edit mode after successful update
-    // }
-  } catch (err) {
-    console.error('Unexpected error:', err);
-  }
-};
-
-
-// /////
+  const handleMenuItemPress = (item) => {
+    setMenuVisible(false);
+    if (item === 'goToPage') {
+      navigation.navigate('PageName'); // Chuyển đến trang khác
+    }
+  };
 
   return (
     <View style={styles.container}>
-      {/* Blue Header */}
       <View style={styles.header}>
+        <TouchableOpacity onPress={handleMenuPress}>
+          <AntDesign name="ellipsis1" size={30} color="#f43f5e" />
+        </TouchableOpacity>
 
-
-       <Link href="/allocations/new" asChild>
-          <TouchableOpacity >
-            <View style ={{flex: 1, top: 130, right:-100}}>
-              <Image style={{zIndex: 1}} source = {require('../../../assets/image.png')}/>
-            </View>
-          </TouchableOpacity>
-       </Link> 
-      
-
+        {isMenuVisible && (
+          <View style={styles.menu}>
+            <Pressable style={styles.menuItem} onPress={() => handleMenuItemPress('goToPage')}>
+              <Text style={styles.menuItemText}>Go to Page</Text>
+            </Pressable>
+          </View>
+        )}
       </View>
 
       <View style={styles.iconCircle}>
-        <AntDesign name="user" size={50} color="#f43f5e" style={{bottom:2}}/>
+        <AntDesign name="user" size={50} color="#f43f5e" style={{ bottom: 2 }} />
       </View>
-      <Text style={styles.title}></Text>
 
       <View style={styles.infoContainer}>
-        <View style={styles.row1}>
+        <View style={styles.row}>
           <FontAwesome6 name="user-large" size={22} color="#6B6B6B" />
-          <Text style={styles.value1}>{user.user_metadata.userName || 'User Name'}</Text>
+          <Text style={styles.value}>{user.user_metadata.userName || 'User Name'}</Text>
         </View>
-        
-        <View style={[styles.divider, {bottom:30}]}/>
+        <View style={styles.divider} />
 
-        
-        <View style={styles.row2}>
+        <View style={styles.row}>
           <MaterialIcons name="phone" size={24} color="#6B6B6B" />
-          <Text style={styles.value2}>{user.user_metadata.phoneNumber || 'Phone Number'}</Text>
-          <Text style={styles.value2}>{user.user_metadata.NgheNghiep || 'khonng co so nghe nghiep'}</Text>
+          <Text style={styles.value}>{user.user_metadata.phoneNumber || 'Phone Number'}</Text>
         </View>
-        <TouchableOpacity onPress={handleSaveUserName}>
-              <Text style={styles.saveButton}>Save</Text>
-            </TouchableOpacity>
+        <View style={styles.divider} />
 
-        <View style={[styles.divider, {bottom:70}]}/>
+        <View style={styles.row}>
+          <MaterialIcons name="cake" size={24} color="#6B6B6B" />
+          <Text style={styles.value}>{user.user_metadata.dateOfBirth || 'Birthday'}</Text>
+        </View>
+        <View style={styles.divider} />
 
-        <View style={styles.row3}>
+        <View style={styles.row}>
+          <MaterialIcons name="work" size={24} color="#6B6B6B" />
+          <Text style={styles.value}>{user.user_metadata.job || 'Work'}</Text>
+        </View>
+        <View style={styles.divider} />
+
+        <View style={styles.row}>
           <MaterialIcons name="email" size={24} color="#6B6B6B" />
           <Text style={styles.value}>{user?.email || 'Email'}</Text>
         </View>
+        <View style={styles.divider} />
 
-        <View style={[styles.divider, {bottom:110, height:3}]}/>
-
+        <TouchableOpacity onPress={handleSaveUserName}>
+          <Text style={styles.saveButton}>Save</Text>
+        </TouchableOpacity>
       </View>
 
-
-      
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress} activeOpacity={0.3}>
         <Text style={styles.logoutButtonText}>LOG OUT</Text>
       </TouchableOpacity>
 
-  
       <Modal
         animationType="fade"
         transparent={true}
@@ -166,7 +155,6 @@ const handleSaveUserName = async () => {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -179,18 +167,11 @@ const styles = StyleSheet.create({
     height: 320,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 500, // Full width of the screen
-    bottom: -200, 
-    right:30  // Adjust bottom position for spacing
+    width: 500,
+    bottom: -200,
+    right: 30,
   },
-  headerText: {
-    color: 'white',
-    fontSize: 30,
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    right:40,  // Adjust right position for spacing
-    bottom:20
-  },
+
   iconCircle: {
     width: 80,
     height: 80,
@@ -201,17 +182,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     marginBottom: 20,
     alignSelf: 'center',
-    top:130,
+    top: 70, // Tăng giá trị này để đẩy icon xuống
     borderColor: "#f43f5e",
     zIndex: 1000,
-    right:110
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 40,
-    color: '#111',
+    right: 110,
   },
 
   infoContainer: {
@@ -221,171 +195,144 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderWidth: 1,
     borderColor: '#E5E5E5',
-    top:-5,
-    height:'100%',
-    width:412,
-    right:30
-
-
-
+    top: 20, // Tăng giá trị này để đẩy khung thông tin xuống
+    height: '100%',
+    width: 412,
+    right: 30,
   },
-  row1: {
+
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
-    padding: 30,
-    bottom:-17,
-    left:-19
-  },
-
-  row2:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    padding: 30,
-    bottom:20,
-    left:-19
-  },
-
-  row3:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    padding: 30,
-    bottom:60, 
-    left:-19
+    paddingHorizontal: 30,
+    left: -19,
+    paddingVertical: 6,
+    top: 20,
   },
 
   value: {
     fontSize: 18,
     color: '#111',
     marginLeft: 10,
-    bottom:-1
   },
 
-  value1:{
-    fontSize: 18,
-    color: '#111',
-    marginLeft: 10,
-    bottom:-5
+  divider: {
+    height: 3,
+    backgroundColor: '#f43f5e',
+    marginVertical: 10,
+    width: '100%',
   },
 
-
-  value2:{
-    fontSize: 18,
-    color: '#111',
-    marginLeft: 10,
-    bottom:-2
+  saveButton: {
+    textAlign: 'center',
+    color: '#f43f5e',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 10,
   },
-
-
 
   logoutButton: {
-  
-    backgroundColor: '#F43f5e',
+    backgroundColor: '#F43F5E',
     paddingVertical: 15,
     borderRadius: 50,
     bottom: 450,
     alignSelf: 'center',
-    width: '80%',  // Make button span 80% of the screen width
-    zIndex: 1000
+    width: '80%',
+    zIndex: 1000,
   },
+
   logoutButtonText: {
     color: '#FFF',
-    textAlign: 'center',
     fontSize: 18,
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
+
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+
   modalContainer: {
-    width: 300,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+    backgroundColor: '#fff',
     padding: 20,
+    borderRadius: 10,
+    width: 300,
+    justifyContent: 'center',
     alignItems: 'center',
   },
+
   iconContainer: {
-    backgroundColor: '#FFE0B2',
-    borderRadius: 50,
-    padding: 10,
-    marginBottom: 15,
+    marginBottom: 10,
   },
+
   exclamationIcon: {
-    fontSize: 40,
-    color: '#F57C00',
+    fontSize: 30,
+    color: '#f43f5e',
   },
+
   modalText: {
     fontSize: 18,
     color: '#111',
-    marginBottom: 25,
-    textAlign: 'center',
+    marginBottom: 20,
   },
+
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
   },
+
   cancelButton: {
-    flex: 1,
-    backgroundColor: '#9E9E9E',
+    backgroundColor: '#F5F5F5',
     paddingVertical: 10,
-    borderRadius: 20,
-    marginRight: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
+
   cancelButtonPressed: {
-    backgroundColor: '#757575',
+    backgroundColor: '#ddd',
   },
+
   cancelButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#111',
   },
+
   confirmButton: {
-    flex: 1,
     backgroundColor: '#F43F5E',
     paddingVertical: 10,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
+
   confirmButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#fff',
   },
-  encouragementText: {
-    fontSize: 18,
-    color: '#f43f5e',
-    textAlign: 'center',
+
+  menu: {
     position: 'absolute',
-    bottom: 80,  // vị trí hiển thị câu khích lệ
+    top: 40,
+    right: 10,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    shadowColor: 'black',
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+    width: 150,
+    zIndex: 9999,
   },
 
-  divider:{
-    height:2,
-    backgroundColor:'#f43f5e',
-    marginVertical:20,
-    width:'100%',
-    bottom:40
+  menuItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f5f5f5',
   },
 
-  logo: {
-    width: 200,  // Chiều rộng của logo
-    height: 200,  // Chiều cao của logo
-    resizeMode: 'contain',  // Đảm bảo ảnh không bị biến dạng
-    marginBottom: 200,  // Khoảng cách phía dưới logo
+  menuItemText: {
+    fontSize: 16,
+    color: '#111',
   },
-  saveButton:{
-    width: 200,  // Chiều rộng của logo
-    height: 200,
-  }
-
-
 });

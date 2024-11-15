@@ -21,7 +21,7 @@ const EditProfileScreen = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Edit Profile Information</Text>
+        <Text style={styles.headerTitle}>Edit Profile</Text>
       </View>
 
       {/* Profile Picture */}
@@ -33,7 +33,7 @@ const EditProfileScreen = () => {
           />
         </View>
         <TouchableOpacity style={styles.cameraIconContainer}>
-          <Icon name="camera-alt" size={20} color="#FFFFFF" />
+          <Icon name="add" size={20} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
@@ -85,11 +85,27 @@ const EditProfileScreen = () => {
       {/* Gender Selection */}
       <View style={styles.genderContainer}>
         <TouchableOpacity onPress={() => handleGenderSelect('Male')} style={styles.genderOption}>
-          <View style={[styles.radioCircle, gender === 'Male' && styles.selectedCircle]} />
+          <View
+            style={[
+              styles.radioCircle,
+              gender === 'Male' && styles.selectedCircle,
+              gender === 'Male' && { borderWidth: 0 }, // Loại bỏ border khi chọn
+            ]}
+          >
+            {gender === 'Male' && <Icon name="check" size={14} color="#FFFFFF" />}
+          </View>
           <Text style={styles.genderLabel}>Male</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleGenderSelect('Female')} style={styles.genderOption}>
-          <View style={[styles.radioCircle, gender === 'Female' && styles.selectedCircle]} />
+          <View
+            style={[
+              styles.radioCircle,
+              gender === 'Female' && styles.selectedCircle,
+              gender === 'Female' && { borderWidth: 0 }, // Loại bỏ border khi chọn
+            ]}
+          >
+            {gender === 'Female' && <Icon name="check" size={14} color="#FFFFFF" />}
+          </View>
           <Text style={styles.genderLabel}>Female</Text>
         </TouchableOpacity>
       </View>
@@ -110,20 +126,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9F9F9',
     padding: 16,
   },
-
   header: {
     alignItems: 'center',
     marginBottom: 20,
-    top:105,
-    right:70
+    top: 95,
+    right: 115,
   },
-
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#f43f5e',
   },
-
   profileContainer: {
     alignItems: 'center',
     marginBottom: 20,
@@ -138,8 +151,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    right:120,
-    bottom:30,
+    right: 120,
+    bottom: 40,
   },
   profilePicture: {
     width: 100,
@@ -148,11 +161,13 @@ const styles = StyleSheet.create({
   },
   cameraIconContainer: {
     position: 'absolute',
-    bottom: 25,
+    bottom: 35,
     backgroundColor: '#f43f5e',
     borderRadius: 15,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
     padding: 4,
-    left:70,
+    left: 80,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -203,6 +218,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
+    bottom:-50
   },
   saveButtonText: {
     color: '#FFFFFF',

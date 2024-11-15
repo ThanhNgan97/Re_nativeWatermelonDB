@@ -44,11 +44,11 @@ export default function HomeScreen() {
     </View>
 
       {/* Floating Action Button */}
-      {/* <Link href="/allocations/new" asChild>
+      <Link href="/allocations/new" asChild>
         <TouchableOpacity style={styles.fab}>
           <Feather name="plus" size={24} color="white" />
         </TouchableOpacity>
-      </Link> */}
+      </Link>
 
       <StatusBar style="auto" />
     </View>
