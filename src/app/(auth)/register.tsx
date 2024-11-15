@@ -44,7 +44,15 @@ export default function Register() {
       const { data: { session }, error } = await supabase.auth.signUp({
         email: email,
         password: password,
-      });
+        options: {
+          data: {
+            
+              NgheNghiep: "Giang Vien",
+              ngaySinh: "12/12/2012",
+            
+          },
+        },
+    });
 
       if (error) {
         console.error('Error during sign up:', error);

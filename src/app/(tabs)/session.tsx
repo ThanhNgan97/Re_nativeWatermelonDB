@@ -1,10 +1,11 @@
 import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, Modal, Pressable, Animated, Easing, Image } from 'react-native';
 import { useAuth } from '../../providers/AuthProvider';
-import { useNavigation } from 'expo-router';
+import { Link, useNavigation } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { MaterialIcons } from '@expo/vector-icons';
+import { supabase } from '../../lib/supabase';
 
 export default function SessionScreen() {
   const { user, logout } = useAuth();
@@ -12,6 +13,8 @@ export default function SessionScreen() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCancelPressed, setCancelPressed] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;  // Giá trị hoạt ảnh
+  // const { useredit } = updateUser();
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -46,16 +49,47 @@ export default function SessionScreen() {
     outputRange: [400, -400], // Di chuyển từ 400px bên phải màn hình sang -400px bên trái
   });
 
+/////
+const handleSaveUserName = async () => {
+  
+
+  try {
+    const { data, error } = await supabase.auth.updateUser({
+      data: {
+        userName : "KHANH BO DANG YEW",
+        
+      },
+    });
+
+    // if (error) {
+    //   console.error('Error updating username:', error.message);
+    //   alert('Failed to update username');
+    // } else {
+    //   alert('Username updated successfully');
+    //   setIsEditing(false); // Exit edit mode after successful update
+    // }
+  } catch (err) {
+    console.error('Unexpected error:', err);
+  }
+};
+
+
+// /////
+
   return (
     <View style={styles.container}>
       {/* Blue Header */}
       <View style={styles.header}>
-        
-      <TouchableOpacity>
-        <View style ={{flex: 1, top: 130, right:-100}}>
-          <Image style={{zIndex: 1}} source = {require('../../../assets/image.png')}/>
-        </View>
-      </TouchableOpacity>
+
+
+       <Link href="/allocations/new" asChild>
+          <TouchableOpacity >
+            <View style ={{flex: 1, top: 130, right:-100}}>
+              <Image style={{zIndex: 1}} source = {require('../../../assets/image.png')}/>
+            </View>
+          </TouchableOpacity>
+       </Link> 
+      
 
       </View>
 
@@ -76,7 +110,11 @@ export default function SessionScreen() {
         <View style={styles.row2}>
           <MaterialIcons name="phone" size={24} color="#6B6B6B" />
           <Text style={styles.value2}>{user.user_metadata.phoneNumber || 'Phone Number'}</Text>
+          <Text style={styles.value2}>{user.user_metadata.NgheNghiep || 'khonng co so nghe nghiep'}</Text>
         </View>
+        <TouchableOpacity onPress={handleSaveUserName}>
+              <Text style={styles.saveButton}>Save</Text>
+            </TouchableOpacity>
 
         <View style={[styles.divider, {bottom:70}]}/>
 
@@ -89,11 +127,13 @@ export default function SessionScreen() {
 
       </View>
 
+
+      
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress} activeOpacity={0.3}>
         <Text style={styles.logoutButtonText}>LOG OUT</Text>
       </TouchableOpacity>
 
-
+  
       <Modal
         animationType="fade"
         transparent={true}
@@ -342,5 +382,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',  // Đảm bảo ảnh không bị biến dạng
     marginBottom: 200,  // Khoảng cách phía dưới logo
   },
+  saveButton:{
+    width: 200,  // Chiều rộng của logo
+    height: 200,
+  }
+
 
 });
