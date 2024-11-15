@@ -66,7 +66,7 @@ export default function SessionScreen() {
 
       <View style={styles.infoContainer}>
         <View style={styles.row1}>
-          <FontAwesome6 name="user-large" size={22} color="#6B6B6B" />
+          <FontAwesome6 name="user-large" size={24} color="#6B6B6B" />
           <Text style={styles.value1}>{user.user_metadata.userName || 'User Name'}</Text>
         </View>
         
@@ -93,7 +93,12 @@ export default function SessionScreen() {
         <Text style={styles.logoutButtonText}>LOG OUT</Text>
       </TouchableOpacity>
 
+      {/* Câu nói khích lệ với hiệu ứng chạy */}
+      {/* <Animated.Text style={[styles.encouragementText, { transform: [{ translateX }] , bottom:190 }]}>
+        "You are amazing! Keep pushing forward! ✨"
+      </Animated.Text> */}
 
+      {/* Logout Confirmation Modal */}
       <Modal
         animationType="fade"
         transparent={true}

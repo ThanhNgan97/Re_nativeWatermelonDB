@@ -65,8 +65,8 @@ export default function AccountsScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Name</Text>
-        <Text style={styles.headerText}>CAP    </Text>
-        <Text style={styles.headerText}>TAP     </Text>
+        <Text style={styles.headerText}>CAP      </Text>
+        <Text style={styles.headerText}>TAP</Text>
         <Text style={styles.headerText}>            </Text>
       </View>
 

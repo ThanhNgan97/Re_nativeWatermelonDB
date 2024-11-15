@@ -13,7 +13,7 @@ import { supabase } from '../../lib/supabase';
 import { useRouter, useNavigation } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import BackgroundScreen from '../../../BackgroundScreen';
+import BackgroundScreen from '../../../BackgroundScreen'
 
 export default function Auth() {
   const [email, setEmail] = useState('');
@@ -36,22 +36,25 @@ export default function Auth() {
   }, [navigation]);
 
   async function signInWithEmail() {
+    // Check if the email is in a valid format before making the request
     if (!isValidEmail(email)) {
       Alert.alert('Error:', 'Invalid email format. Please enter a valid Gmail address.');
       return;
     }
-
+  
     setLoading(true);
-
+  
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
-
+  
     if (error) {
       if (error.message.includes("Invalid login credentials")) {
+        // Check if the error is related to incorrect password
         Alert.alert('Error:', 'Incorrect password. Please try again.');
       } else if (error.message.includes("Invalid email or password")) {
+        // General case for invalid email or password
         Alert.alert('Error:', 'Invalid email or password. Please try again.');
       } else {
         Alert.alert('Error:', error.message);
@@ -61,12 +64,13 @@ export default function Auth() {
         Alert.alert('Please check your inbox for email verification!');
       } else {
         console.log('Sign-in successful:', data.session);
+        // Redirect the user to the home page or wherever necessary
       }
     }
-
+  
     setLoading(false);
   }
-
+    
   return (
     <View style={styles.container}>
       <View style={styles.boder}>
@@ -109,6 +113,7 @@ export default function Auth() {
             style={styles.eyeIcon}
             onPress={() => setPasswordVisible(!isPasswordVisible)}
           >
+
             <AntDesign
               name={isPasswordVisible ? 'eye' : 'eyeo'}
               size={28}
@@ -162,6 +167,10 @@ export default function Auth() {
   );
 }
 
+
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -169,18 +178,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
-  imageStyle: {
-    width: 'auto',
-    height: 'auto',
+
+ 
+
+  imageStyle:{
+    width:'auto',
+    height:'auto',
     justifyContent: 'center',
     alignItems: 'center',
+   
+
   },
+
   heading: {
     fontSize: 60,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
     color: '#ffffff',
+
   },
   subheading: {
     fontSize: 16,
@@ -188,30 +204,35 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     color: '#ffffff',
   },
+
   inputContainer: {
     marginBottom: 20,
   },
+
   input: {
     backgroundColor: '#FFFFFF',
     padding: 15,
-    paddingLeft: 50,
+    paddingLeft:50,
     borderRadius: 50,
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#E5E5E5',
-    bottom: 30,
+    bottom:30
   },
+
   forgotPassword: {
     alignSelf: 'flex-end',
     marginBottom: 30,
-    bottom: 19,
+    bottom:19
   },
   forgotPasswordText: {
     color: '#007BFF',
+    // textDecorationLine: 'underline',//chữ gạch chân
     fontWeight: 'bold',
-  },
+  }
+  ,
   signInButton: {
-    backgroundColor: '#F43F5E',
+    backgroundColor: '#F43F5E', 
     paddingVertical: 15,
     borderRadius: 50,
     marginBottom: 20,
@@ -241,6 +262,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+
   socialButton: {
     backgroundColor: '#FFF',
     padding: 10,
@@ -255,31 +277,43 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: 'absolute',
     right: 15,
-    top: -17,
+    top: -20,
     zIndex: 1,
-    transform: [{ scale: 0.7 }],
+    transform: [{ scale: 0.7 }]
   },
-  iconUser: {
+
+  iconUser:{
     position: 'absolute',
     left: 13,
-    bottom: 125, // Adjusted value to move up
+    bottom:115,
     zIndex: 1,
-    transform: [{ scale: 0.7 }],
+    transform: [{ scale: 0.7 }]
   },
-  iconLock: {
+
+  iconLock:{
     position: 'absolute',
     left: 13,
-    bottom: 303, // Adjusted value to move up
+    bottom: 290,
     zIndex: 1,
     transform: [{ scale: 0.7 }],
   },
-  boder: {
-    height: 270,
-    width: 411,
+
+  boder:{
+    height:270,
+    width:411,
     position: 'absolute',
-    bottom: 620,
+    bottom:620 //620
   },
-  imageHello: {
-    bottom: 60,
-  },
+
+  imageHello:{
+    bottom:60,
+  }
+
+
 });
+
+
+  function isValidEmail(email: string) {
+    throw new Error('Function not implemented.');
+  }
+

@@ -14,6 +14,8 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [userName, setUserName] = useState(''); 
+  const [phoneNumber, setPhoneNumber] = useState(''); 
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
@@ -23,14 +25,74 @@ export default function Register() {
     });
   }, [navigation]);
 
+  // Helper function to check email format
   const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
     return emailRegex.test(email);
   };
 
+  // Function to check if user already exists
+  const checkUserExists = async (email, userName, phoneNumber) => {
+    try {
+      const { data: emailExists } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      if (emailExists) {
+         Alert.alert("Error: ", "The email already exists");
+        return false;
+      }
+
+      const { data: userNameExists } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('userName', userName)
+        .single();
+
+      if (userNameExists) {
+        Alert.alert('Error:', 'The username is already taken.');
+        return false;
+      }
+
+      const { data: phoneExists } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('phoneNumber', phoneNumber)
+        .single();
+
+      if (phoneExists) {
+        Alert.alert('Error:', 'Phone number is already registered.');
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error checking user existence:', error);
+      Alert.alert('An error occurred while checking user information.');
+      return false;
+    }
+  };
+
   async function signUpWithEmail() {
+    if (!userName) {
+      Alert.alert('Error:', 'Please enter a User Name.');
+      return;
+    }
+
     if (!isValidEmail(email)) {
       Alert.alert('Error:', 'Please enter a valid email address.');
+      return;
+    }
+
+    if (!phoneNumber) {
+      Alert.alert('Error:', 'Please enter a Phone Number.');
+      return;
+    }
+
+    if (!/^0\d{9}$/.test(phoneNumber)) {
+      Alert.alert('Error:', 'Phone number is invalid! Must be 10 digits and start with 0.');
       return;
     }
 
@@ -39,11 +101,22 @@ export default function Register() {
       return;
     }
 
+    const isUnique = await checkUserExists(email, userName, phoneNumber);
+    if (!isUnique) {
+      return;
+    }
+
     setLoading(true);
     try {
       const { data: { session }, error } = await supabase.auth.signUp({
         email: email,
         password: password,
+        options: {
+          data: {
+            userName: userName,
+            phoneNumber: phoneNumber,
+          },
+        },
       });
 
       if (error) {
@@ -68,6 +141,18 @@ export default function Register() {
       <Text style={styles.heading}>Create Account</Text>
       <Text style={styles.subheading}>Sign up to get started!</Text>
 
+      {/* User Name Input */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          onChangeText={(text) => setUserName(text)}
+          value={userName}
+          placeholder="Enter User Name"
+          placeholderTextColor="#A3A3A3"
+          autoCapitalize="words"
+          style={styles.input}
+        />
+      </View>
+
       {/* Email Input */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -76,6 +161,18 @@ export default function Register() {
           placeholder="Enter Email"
           placeholderTextColor="#A3A3A3"
           autoCapitalize="none"
+          style={styles.input}
+        />
+      </View>
+
+      {/* Phone Number Input */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          onChangeText={(text) => setPhoneNumber(text)}
+          value={phoneNumber}
+          placeholder="Enter Phone Number"
+          placeholderTextColor="#A3A3A3"
+          keyboardType="phone-pad"
           style={styles.input}
         />
       </View>
@@ -177,3 +274,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
