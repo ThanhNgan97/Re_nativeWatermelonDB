@@ -14,8 +14,6 @@ export default function SessionScreen() {
   const [isCancelPressed, setCancelPressed] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
-  const [isMenuVisible, setMenuVisible] = useState(false);
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -52,31 +50,16 @@ export default function SessionScreen() {
     }
   };
 
-  const handleMenuPress = () => {
-    setMenuVisible(!isMenuVisible);
-  };
-
-  const handleMenuItemPress = (item) => {
-    setMenuVisible(false);
-    if (item === 'goToPage') {
-      navigation.navigate('PageName'); // Chuyển đến trang khác
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleMenuPress}>
-          <AntDesign name="ellipsis1" size={30} color="#f43f5e" />
-        </TouchableOpacity>
-
-        {isMenuVisible && (
-          <View style={styles.menu}>
-            <Pressable style={styles.menuItem} onPress={() => handleMenuItemPress('goToPage')}>
-              <Text style={styles.menuItemText}>Go to Page</Text>
-            </Pressable>
-          </View>
-        )}
+        <Link href="../hiddenScreen/editProfile" asChild>
+          <TouchableOpacity>
+            <View style={{ flex: 1, top: 130, right: -100 }}>
+              <Image style={{ zIndex: 1 }} source={require('../../../assets/image.png')} />
+            </View>
+          </TouchableOpacity>
+        </Link>
       </View>
 
       <View style={styles.iconCircle}>
@@ -187,20 +170,21 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     right: 110,
   },
+  
+infoContainer: {
+  backgroundColor: '#FFFFFF',
+  padding: 20,
+  borderRadius: 30,
+  marginBottom: 30,
+  borderWidth: 1,
+  borderColor: '#E5E5E5',
+  top: 20, // Tăng giá trị này để đẩy khung thông tin xuống
+  height: '100%',
+  width: 412,
+  right: 30,
+},
 
-  infoContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 30,
-    marginBottom: 30,
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    top: 20, // Tăng giá trị này để đẩy khung thông tin xuống
-    height: '100%',
-    width: 412,
-    right: 30,
-  },
-
+//chinh icon/tenance icon
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -208,9 +192,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     left: -19,
     paddingVertical: 6,
-    top: 20,
+    top:20
   },
-
+  
   value: {
     fontSize: 18,
     color: '#111',
@@ -240,12 +224,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '80%',
     zIndex: 1000,
+    
   },
 
   logoutButtonText: {
     color: '#FFF',
-    fontSize: 18,
     textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 
   modalOverlay: {
@@ -256,83 +242,62 @@ const styles = StyleSheet.create({
   },
 
   modalContainer: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
     width: 300,
-    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 20,
     alignItems: 'center',
   },
 
   iconContainer: {
-    marginBottom: 10,
+    backgroundColor: '#FFE0B2',
+    borderRadius: 50,
+    padding: 10,
+    marginBottom: 15,
   },
-
   exclamationIcon: {
-    fontSize: 30,
-    color: '#f43f5e',
+    fontSize: 40,
+    color: '#F57C00',
   },
-
   modalText: {
     fontSize: 18,
     color: '#111',
-    marginBottom: 20,
+    marginBottom: 25,
+    textAlign: 'center',
   },
-
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
   },
-
   cancelButton: {
-    backgroundColor: '#F5F5F5',
+    flex: 1,
+    backgroundColor: '#9E9E9E',
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 20,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-
   cancelButtonPressed: {
-    backgroundColor: '#ddd',
+    backgroundColor: '#757575',
   },
-
   cancelButtonText: {
-    color: '#111',
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
-
   confirmButton: {
+    flex: 1,
     backgroundColor: '#F43F5E',
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-
   confirmButtonText: {
-    color: '#fff',
-  },
-
-  menu: {
-    position: 'absolute',
-    top: 40,
-    right: 10,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
-    width: 150,
-    zIndex: 9999,
-  },
-
-  menuItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f5f5f5',
-  },
-
-  menuItemText: {
+    color: '#FFF',
     fontSize: 16,
-    color: '#111',
+    fontWeight: 'bold',
   },
 });
