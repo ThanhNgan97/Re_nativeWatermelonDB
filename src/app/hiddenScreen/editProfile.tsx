@@ -3,12 +3,14 @@ import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../providers/AuthProvider';
 
 
 
 
 
 const EditProfileScreen = () => {
+  const { user, logout } = useAuth();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [birthdate, setBirthdate] = useState('');
@@ -152,7 +154,7 @@ router.navigate('/session');
           style={styles.input}
           value={name}
           onChangeText={setName}
-          placeholder="Name"
+          placeholder={user.user_metadata.Name || 'User Name'}
         />
         <Icon name="edit" size={20} color="#333333" style={styles.editIcon} />
       </View>
@@ -163,7 +165,7 @@ router.navigate('/session');
           style={styles.input}
           value={phone}
           onChangeText={setPhone}
-          placeholder="Phone Number"
+          placeholder={user.user_metadata.PhoneNumber || 'Phone Number'}
           keyboardType="phone-pad"
         />
         <Icon name="edit" size={20} color="#333333" style={styles.editIcon} />
@@ -175,7 +177,7 @@ router.navigate('/session');
           style={styles.input}
           value={birthdate}
           onChangeText={setBirthdate}
-          placeholder="Birthdate"
+          placeholder={user.user_metadata.BirthDate || 'Birthday'}
         />
         <Icon name="edit" size={20} color="#333333" style={styles.editIcon} />
       </View>
@@ -186,7 +188,7 @@ router.navigate('/session');
           style={styles.input}
           value={occupation}
           onChangeText={setOccupation}
-          placeholder="Occupation"
+          placeholder={user.user_metadata.Occuppation || 'Work'}
         />
         <Icon name="edit" size={20} color="#333333" style={styles.editIcon} />
       </View>

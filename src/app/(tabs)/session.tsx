@@ -111,7 +111,7 @@ export default function SessionScreen() {
 
         <View style={styles.row}>
           <MaterialIcons name="work" size={24} color="#6B6B6B" />
-          <Text style={styles.value}>{user.user_metadata.Gender || 'Work'}</Text>
+          <Text style={styles.value}>{user.user_metadata.Gender || 'Gender'}</Text>
         </View>
         <View style={styles.divider} />
 
