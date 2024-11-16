@@ -3,6 +3,10 @@ import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+
+
+
+
 const EditProfileScreen = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -12,19 +16,32 @@ const EditProfileScreen = () => {
 
   const navigation = useNavigation();
 
-  // Hide the header for this screen
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: true,
-      // headerTitle: () => 
-      //   <View style={styles.customHeader}>
-      //     <Text style={styles.welcomeText}>
-      //       Edit Your Profile
-      //     </Text>
-      //   </View>
-    })
-  }, [navigation]);
 
+  //nút quay lại
+ useLayoutEffect(() => {
+  navigation.setOptions({
+    headerShown: true,
+    headerLeft: () => (
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Icon name="arrow-back" size={24} color="#000" style={{ marginLeft: -5, marginRight: 20 }} />
+      </TouchableOpacity>
+    ),
+
+    headerTitle: () => 
+      <View style={styles.customHeader}>
+        <Text style={styles.welcomeText}>
+          Edit Your Profile
+        </Text>
+      </View>
+    
+    
+  });
+}, [navigation]);
+
+
+
+
+  
   const handleGenderSelect = (selectedGender) => {
     setGender(selectedGender);
   };
@@ -257,6 +274,11 @@ const styles = StyleSheet.create({
     color: '#111827', // Dark text color for welcome message
     right: 15,
     bottom: 3,
+  },
+  headerTitleStyle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#f43f5e',
   },
 });
 

@@ -19,6 +19,9 @@ function NewAllocationScreen({ accounts }: { accounts: Account[] }) {
 
   const navigation = useNavigation();
 
+
+  
+
   // Hide the header for this screen
   useLayoutEffect(() => {
     navigation.setOptions({
