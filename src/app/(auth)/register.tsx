@@ -47,8 +47,13 @@ export default function Register() {
         options: {
           data: {
             
-              NgheNghiep: "Giang Vien",
-              ngaySinh: "12/12/2012",
+              Name: "",
+              PhoneNumber: "",
+              BirthDate: "",
+              Occuppation: "",
+              Gender: "",
+              
+
             
           },
         },

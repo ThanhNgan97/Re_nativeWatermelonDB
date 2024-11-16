@@ -40,15 +40,28 @@ export default function SessionScreen() {
     logout();
   };
 
-  const handleSaveUserName = async () => {
-    try {
-      const { data, error } = await supabase.auth.updateUser({
-        data: { userName: "KHANH BO DANG YEW" },
-      });
-    } catch (err) {
-      console.error('Unexpected error:', err);
-    }
-  };
+  // const handleSaveUserName = async () => {
+  //   try {
+  //     const { data, error } = await supabase.auth.updateUser({
+  //       data: { userName: "KHANH BO DANG YEW" },
+  //     });
+  //   } catch (err) {
+  //     console.error('Unexpected error:', err);
+  //   }
+  // };
+/**
+ * 
+ *Name: name,
+              PhoneNumber: phone,
+              BirthDate: birthdate,
+              Occuppation: occupation,
+              Gender: gender,
+ */
+
+
+
+
+
 
   return (
     <View style={styles.container}>
@@ -66,28 +79,39 @@ export default function SessionScreen() {
         <AntDesign name="user" size={50} color="#f43f5e" style={{ bottom: 2 }} />
       </View>
 
+
+
+
+
       <View style={styles.infoContainer}>
         <View style={styles.row}>
           <FontAwesome6 name="user-large" size={22} color="#6B6B6B" />
-          <Text style={styles.value}>{user.user_metadata.userName || 'User Name'}</Text>
+          <Text style={styles.value}>{user.user_metadata.Name || 'User Name'}</Text>
         </View>
         <View style={styles.divider} />
 
         <View style={styles.row}>
           <MaterialIcons name="phone" size={24} color="#6B6B6B" />
-          <Text style={styles.value}>{user.user_metadata.phoneNumber || 'Phone Number'}</Text>
+          <Text style={styles.value}>{user.user_metadata.PhoneNumber || 'Phone Number'}</Text>
         </View>
         <View style={styles.divider} />
 
         <View style={styles.row}>
           <MaterialIcons name="cake" size={24} color="#6B6B6B" />
-          <Text style={styles.value}>{user.user_metadata.dateOfBirth || 'Birthday'}</Text>
+          <Text style={styles.value}>{user.user_metadata.BirthDate || 'Birthday'}</Text>
         </View>
         <View style={styles.divider} />
 
         <View style={styles.row}>
           <MaterialIcons name="work" size={24} color="#6B6B6B" />
-          <Text style={styles.value}>{user.user_metadata.job || 'Work'}</Text>
+          <Text style={styles.value}>{user.user_metadata.Occuppation || 'Work'}</Text>
+        </View>
+        <View style={styles.divider} />
+
+
+        <View style={styles.row}>
+          <MaterialIcons name="work" size={24} color="#6B6B6B" />
+          <Text style={styles.value}>{user.user_metadata.Gender || 'Work'}</Text>
         </View>
         <View style={styles.divider} />
 
@@ -97,9 +121,9 @@ export default function SessionScreen() {
         </View>
         <View style={styles.divider} />
 
-        <TouchableOpacity onPress={handleSaveUserName}>
+        {/* <TouchableOpacity onPress={handleSaveUserName}>
           <Text style={styles.saveButton}>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress} activeOpacity={0.3}>
@@ -220,7 +244,7 @@ infoContainer: {
     backgroundColor: '#F43F5E',
     paddingVertical: 15,
     borderRadius: 50,
-    bottom: 450,
+    bottom: 400,
     alignSelf: 'center',
     width: '80%',
     zIndex: 1000,
