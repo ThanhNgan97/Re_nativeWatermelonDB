@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { router, useNavigation } from 'expo-router';
+import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -9,18 +10,35 @@ const EditProfileScreen = () => {
   const [occupation, setOccupation] = useState('');
   const [gender, setGender] = useState('');
 
+  const navigation = useNavigation();
+
+  // Hide the header for this screen
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      // headerTitle: () => 
+      //   <View style={styles.customHeader}>
+      //     <Text style={styles.welcomeText}>
+      //       Edit Your Profile
+      //     </Text>
+      //   </View>
+    })
+  }, [navigation]);
+
   const handleGenderSelect = (selectedGender) => {
     setGender(selectedGender);
   };
 
   const handleSave = () => {
     // Save action here
+    router.back();
   };
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <></>
         <Text style={styles.headerTitle}>Edit Profile</Text>
       </View>
 
@@ -224,6 +242,21 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
+  },
+  customHeader: {
+    paddingHorizontal: 1,
+    paddingTop: 20,
+    paddingBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 5,
+  },
+  welcomeText: {
+    fontSize: 25,
+    fontWeight: '800',
+    color: '#111827', // Dark text color for welcome message
+    right: 15,
+    bottom: 3,
   },
 });
 
